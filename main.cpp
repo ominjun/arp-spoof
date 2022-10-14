@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
-#include "myarpspoof.h"
+#include "mysendarp.h"
 #include <sys/wait.h>
 
 void how_to_usage() {
@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 	pid_t pid;
 	IpMac Mine;
 	char* TempCharString;
-	std::string TempString;
+
 	if (!parse(argc, argv)) // 인자 제대로 줬는지 확인
 		return -1;
 
@@ -34,13 +34,11 @@ int main(int argc, char* argv[]) {
 		fprintf(stderr,"Interface does not match the format\n");
 		return -1;
 	}
-	TempString = TempCharString;
-	Mine.MyMac = Mac(TempString);
+	GetMyMac(&(Mine.MyMac), TempCharString);
 
 	TempCharString = MyIpAddress(argv[1]);// ip 확인
-	TempString = TempCharString;
-	Mine.MyIp = htonl(Ip(TempString));
-
+	GetMyIp(&(Mine.MyIp), TempCharString);
+	
 	for(num_seq=1;num_seq*2<argc;num_seq++)
 	{
 		pid=fork();
@@ -56,7 +54,7 @@ int main(int argc, char* argv[]) {
 		printf("arp spoofing 종료\n");
 		return 0;
 	}
-	MyArpSpoof(argv[1],argv[2*num_seq],argv[2*num_seq+1],Mine);
+	MySendArp(argv[1],argv[2*num_seq],argv[2*num_seq+1],Mine);
 	
 	return 0;
 }

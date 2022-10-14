@@ -1,12 +1,12 @@
 #Makefile
-all: my-arp-spoof
+all: send-arp
 
-my-arp-spoof: myarpspoof.o main.o arphdr.o ethhdr.o ip.o mac.o
-	g++ -o arp-spoof myarpspoof.o main.o arphdr.o ethhdr.o ip.o mac.o -lpcap
+send-arp: mysendarp.o main.o arphdr.o ethhdr.o ip.o mac.o
+	g++ -o send-arp mysendarp.o main.o arphdr.o ethhdr.o ip.o mac.o -lpcap
 
-main.o: myarpspoof.h main.cpp
+main.o: mysendarp.h main.cpp
 
-myarpspoof.o: myarpspoof.h myarpspoof.cpp arphdr.h ethhdr.h
+mysendarp.o: mysendarp.h mysendarp.cpp arphdr.h ethhdr.h
 
 arphdr.o: mac.h ip.h arphdr.h arphdr.cpp
 
@@ -17,6 +17,6 @@ ip.o: ip.h ip.cpp
 mac.o : mac.h mac.cpp
 
 clean:
-	rm -f arp-spoof
+	rm -f send-arp
 	rm -f *.o
 
